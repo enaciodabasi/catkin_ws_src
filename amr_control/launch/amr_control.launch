@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+    <rosparam command="load" file="$(find amr_control)/config/amr_control.yaml"></rosparam>
+
+    <node 
+        name="controller_spawner" 
+        pkg="controller_manager" 
+        type="spawner" 
+        respawn="false"
+        output="screen"
+        args="/amr/joint_state_controller /amr/mobile_base_controller"
+    />
+    
+
+
+    <!-- convert joint states to TF transforms for rviz, etc -->
+   <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+        ns="/amr" respawn="false" output="screen">
+        <remap from="/joint_states" to="/amr/joint_states" />
+        <param name="publish_frequency" type="double" value="50.0" />
+    </node> -->
+
+
+</launch>
