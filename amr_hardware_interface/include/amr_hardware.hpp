@@ -122,6 +122,10 @@ namespace amr
 
             double m_LeftWheelPos = 0;
             double m_RightWheelPos = 0;
+
+            double POS_DIFF_LEFT = 0.0;
+            double POS_DIFF_RIGHT = 0.0;
+            bool INITIAL_EC_READ = true;
             
             public:
             std::vector<double> m_VelocityCommands;

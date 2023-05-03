@@ -42,7 +42,7 @@ amr:
     # Base frame_id #default: base_link
 
     open_loop: false
-    enable_odom_tf: true
+    enable_odom_tf: false
  
     # Velocity and acceleration limitss
     # Whenever a min_* is unspecified, default to -max_*

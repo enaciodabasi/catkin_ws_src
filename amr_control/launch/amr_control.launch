@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <launch>
-
+    <arg name="provide_odom_tf" default="true"></arg>
     <rosparam command="load" file="$(find amr_control)/config/amr_control.yaml"></rosparam>
 
     <node 
@@ -12,6 +12,10 @@
         output="screen"
         args="/amr/joint_state_controller /amr/mobile_base_controller"
     />
+    <group if="$(eval arg('provide_odom_tf') == true)">
+        <param name="/amr/mobile_base_controller/enable_odom_tf" value="true"></param>
+    </group>
+    
     
 
 

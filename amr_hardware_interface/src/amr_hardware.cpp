@@ -164,8 +164,17 @@ namespace amr
             
             std::unique_lock<std::mutex> lck(m_DataMutex);
             auto posLeft = m_Master->read<int32_t>("amr_domain", "EL7221_9014_0", "current_position");
+
+
             //double leftWheelPos = 0.0;
             auto posRight = m_Master->read<int32_t>("amr_domain", "EL7221_9014_1", "current_position");
+
+            if(INITIAL_EC_READ)
+            {
+                POS_DIFF_LEFT = posLeft;
+                POS_DIFF_RIGHT = posRight;
+                INITIAL_EC_READ = false;
+            }
             //double rightWheelPos = 0.0;
             
             auto velLeft = m_Master->read<int32_t>("amr_domain", "EL7221_9014_0", "current_velocity");
@@ -175,8 +184,8 @@ namespace amr
             //            
             //m_JointVelocities[1] = utils::driverVelToLinear(rightWheelVel, m_DriverInfo) / m_WheelRadius;
             
-            m_LeftWheelPos = utils::motorPositionToWheelPositionRad(posLeft, m_PositionHelper);
-            m_RightWheelPos = utils::motorPositionToWheelPositionRad(posRight, m_PositionHelper);
+            m_LeftWheelPos = utils::motorPositionToWheelPositionRad(posLeft, m_PositionHelper) - utils::motorPositionToWheelPositionRad(POS_DIFF_LEFT, m_PositionHelper);
+            m_RightWheelPos = utils::motorPositionToWheelPositionRad(posRight, m_PositionHelper) - utils::motorPositionToWheelPositionRad(POS_DIFF_RIGHT, m_PositionHelper);
         
             m_CurrentVelLeft = utils::driverVelToLinear(velLeft, m_DriverInfo)/m_WheelRadius;
             m_CurrentVelRight = utils::driverVelToLinear(velRight, m_DriverInfo)/m_WheelRadius;

@@ -18,7 +18,8 @@
     </node>
         
     <!-- <include file="$(find amr_mapping)/launch/amr_laser_scan_matcher.launch"></include> -->
-    <include file="$(find amr_mapping)/launch/amr_gmapping.launch"></include>
+    <!-- <include file="$(find amr_mapping)/launch/amr_gmapping.launch"></include> -->
+    <include file="$(find amr_mapping)/launch/hector_mapping.launch"></include>
    <!--  <include file="$(find amr_mapping)/launch/amr_laser_scan_matcher.launch"></include> -->
 
 </launch>
