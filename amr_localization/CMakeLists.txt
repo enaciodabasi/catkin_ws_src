@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(amr_localization)
 
+set(CMAKE_CXX_STANDARD 17)
+
 find_package(catkin REQUIRED COMPONENTS
     geometry_msgs
     nav_msgs
@@ -8,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
     tf2
     #amr_custom_interfaces
 )
+find_package(yaml-cpp REQUIRED)
 
 include_directories(
  ${catkin_INCLUDE_DIRS}
@@ -19,6 +22,13 @@ catkin_package(
     CATKIN_DEPENDS geometry_msgs nav_msgs roscpp
     DEPENDS system_lib
 )
+
+add_executable(
+  amr_position_helper
+  src/amr_position_helper.cpp
+)
+target_link_libraries(amr_position_helper ${catkin_LIBRARIES} ${YAML_CPP_LIBRARIES})
+target_include_directories(amr_position_helper PUBLIC ${catkin_INCLUDE_DIRS} ${YAML_CPP_INCLUDE_DIRS})
 
 #add_executable(amr_wheel_odometry_node src/wheel_odom_node.cpp)
 #target_link_libraries(amr_wheel_odometry_node ${catkin_LIBRARIES})

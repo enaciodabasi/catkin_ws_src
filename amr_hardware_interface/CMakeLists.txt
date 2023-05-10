@@ -4,7 +4,7 @@ project(amr_hardware_interface)
 set(CMAKE_CXX_STANDARD 17)
 
 set(ethercat_interface_lib /usr/local/lib/libethercat_interface.so)
-set(ethercat_interface_lib_INCLUDE_DIRS /home/ubuntu/ethercat_interface/include/)
+set(ethercat_interface_lib_INCLUDE_DIRS /home/naci/Projects/igh_master/include/)
 #set(ethercat_interface_lib_INCLUDE_DIRS /home/naci/Projects/igh_master/include/)
 set(etherlab /usr/local/lib/libethercat.so)
 
@@ -64,7 +64,7 @@ install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
 install(DIRECTORY config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config)
 
 add_executable(amr_hw_ethercat 
-    src/amr_hardware.cpp
+    src/amr_hardware_interface.cpp
     src/amr_hwi_utility.cpp
 )
 #message(FATAL_ERROR ${ethercat_interface_lib_LIBRARIES})

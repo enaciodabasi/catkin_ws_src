@@ -18,6 +18,7 @@ add_service_files(
     FILES
     AmrMoveGoalSrv.srv
     OdomSrv.srv
+    VelLimiter.srv
 )
 
 generate_messages(
