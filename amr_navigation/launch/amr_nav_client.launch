@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node
+        pkg="amr_navigation"
+        type="amr_nav_client"
+        name="amr_nav_client"
+                                >
+    <rosparam command="load" file="$(find amr_navigation)/config/amr_nav_config.yaml"></rosparam>
+    </node>
+
+</launch>

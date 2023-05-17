@@ -1,0 +1,2 @@
+amr_nav_config:
+ path_to_points_file: "/home/ubuntu/catkin_ws/src/amr_navigation/config/amr_nav_points.yaml"

@@ -7,3 +7,17 @@ planner_frequency: 5.0
 oscillation_timeout: 10.0
 oscillation_distance: 0.2
 
+# recovery_behavior_enabled: true
+# recovery_behaviors:
+#  - name: "move_slow_and_clear"
+#    type: "move_slow_and_clear/MoveSlowAndClear" 
+
+# move_slow_and_clear:
+#     clearing_distance: 2.0
+#     limited_trans_speed: 0.15
+#     limited_rot_speed: 0.8
+#     limited_distance: 0.3
+#     planner_namespace: DWAPlannerROS
+#     max_trans_param_name: max_trans_vel
+#     max_rot_param_name: max_rot_vel
+# max_planning_retries: 2

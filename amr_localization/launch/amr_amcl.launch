@@ -1,9 +1,13 @@
 <launch>
+
+<!-- <node pkg="tf" type="static_transform_publisher" name="odom_to_laser" 
+      args="0.35 -0.28 0.09 0.0 0.0 -0.785 /odom /hokuyo_link 50" /> -->
+
 <node pkg="amcl" type="amcl" name="amcl" output="screen">
   <!-- Publish scans from best pose at a max of 10 Hz -->
-  <param name="odom_model_type" value="diff"/>
+  <param name="odom_model_type" value="diff-corrected"/>
   <param name="odom_alpha5" value="0.1"/>
-  <param name="gui_publish_rate" value="10.0"/>
+  <param name="gui_publish_rate" value="100.0"/>
   <param name="laser_max_beams" value="30"/>
   <param name="min_particles" value="500"/>
   <param name="max_particles" value="5000"/>

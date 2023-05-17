@@ -18,6 +18,39 @@ namespace amr
     {
         using namespace ethercat_interface;
 
+        double HardwareInterface::limit(double& v, double v0, double v1, double dt)
+        {
+            const double tempVel = v;
+
+            limitAccel(v, v0, dt);
+            limitVel(v);
+
+            return tempVel != 0.0 ? v / tempVel : 1.0;
+        }
+
+        double HardwareInterface::limitVel(double& v)
+        {
+            const double tempVel = v;
+
+            v = clamp(v, m_MinVelocity, m_MaxVelocity);
+
+            return tempVel != 0.0 ? v / tempVel : 1.0;
+        }
+
+        double HardwareInterface::limitAccel(double& v, double v0, double dt)
+        {
+            const double tempVel = v;
+
+            const double dvMin = m_MinAccel * dt;
+            const double dvMax = m_MaxAccel * dt;
+
+            const double dv = clamp(v - v0, dvMin, dvMax);
+
+            v = v0 + dv;
+
+            return tempVel != 0.0 ? v / tempVel : 1.0; 
+        }
+
         HardwareInterface::HardwareInterface(ros::NodeHandle& nh)
             : m_NodeHandle{nh}
         {
@@ -138,23 +171,43 @@ namespace amr
         void HardwareInterface::write()
         {   
             std::unique_lock<std::mutex> lck(m_DataMutex);
-            int32_t targetVelLeft = m_TargetVelLeft;
+            double targetVelLeft = m_TargetVelLeft;
 
-            int32_t targetVelRight = m_TargetVelRight;
+            double targetVelRight = m_TargetVelRight;
             lck.unlock();
+
+            //hw.m_TargetVelLeft = amr::utils::linearVelToDriverCmd(
+        //        hw.m_VelocityCommands[0] / 10.0,
+        //        hw.m_DriverInfo
+        //) * -1 ;
+//
+        //hw.m_TargetVelRight =  amr::utils::linearVelToDriverCmd(
+        //    hw.m_VelocityCommands[1] / 10.0,
+        //    hw.m_DriverInfo
+        //);
+
+            int32_t targetEncoderVelLeft = amr::utils::linearVelToDriverCmd(
+                targetVelLeft,
+                m_DriverInfo 
+            ) * -1;
+
+            int32_t targetEncoderVelRight = amr::utils::linearVelToDriverCmd(
+                targetVelRight,
+                m_DriverInfo
+            );
 
             m_Master->write<int32_t>(
                 "amr_domain",
                 "EL7221_9014_0",
                 "target_velocity",
-                targetVelLeft
+                targetEncoderVelLeft
             );
             //// sag
             m_Master->write<int32_t>(
                 "amr_domain",
                 "EL7221_9014_1",
                 "target_velocity",
-                targetVelRight
+                targetEncoderVelRight
             );
             
         }
@@ -365,15 +418,18 @@ int main(int argc, char** argv)
 
         hw.cm->update(curr, period);
 
-        hw.m_TargetVelLeft = amr::utils::linearVelToDriverCmd(
-                hw.m_VelocityCommands[0] / 10.0,
-                hw.m_DriverInfo
-        ) * -1 ;
+        hw.m_TargetVelLeft = hw.m_VelocityCommands[0] / 10.0;
+        hw.m_TargetVelRight = hw.m_VelocityCommands[1] / 10.0;
 
-        hw.m_TargetVelRight =  amr::utils::linearVelToDriverCmd(
-            hw.m_VelocityCommands[1] / 10.0,
-            hw.m_DriverInfo
-        );
+        //hw.m_TargetVelLeft = amr::utils::linearVelToDriverCmd(
+        //        hw.m_VelocityCommands[0] / 10.0,
+        //        hw.m_DriverInfo
+        //) * -1 ;
+//
+        //hw.m_TargetVelRight =  amr::utils::linearVelToDriverCmd(
+        //    hw.m_VelocityCommands[1] / 10.0,
+        //    hw.m_DriverInfo
+        //);
 
         lck.unlock();
         

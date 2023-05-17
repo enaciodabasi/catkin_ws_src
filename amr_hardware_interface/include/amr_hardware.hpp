@@ -68,6 +68,12 @@ class ScheduledThread : public std::thread
 };
 
 
+template<typename T>
+T clamp(T x, T min, T max)
+{
+    return std::min(std::max(min, x), max);
+}
+
 namespace amr
 {
     namespace hardware
@@ -114,8 +120,8 @@ namespace amr
             
             double m_WheelRadius = 0.1; // [m]
 
-            int32_t m_TargetVelLeft = 0;
-            int32_t m_TargetVelRight = 0;
+            double m_TargetVelLeft = 0;
+            double m_TargetVelRight = 0;
 
             double m_CurrentVelLeft;
             double   m_CurrentVelRight;
@@ -125,6 +131,7 @@ namespace amr
 
             double POS_DIFF_LEFT = 0.0;
             double POS_DIFF_RIGHT = 0.0;
+
             bool INITIAL_EC_READ = true;
             
             public:
@@ -140,6 +147,15 @@ namespace amr
             //double m_WheelRadius = 0.1;
             //boost::shared_ptr<controller_manager::ControllerManager> m_ControllerManager;
             
+            double m_lastVelLeft = 0.0;
+            double m_lastVelRight = 0.0;
+
+            double m_MaxVelocity;
+            double m_MinVelocity;
+
+            double m_MaxAccel;
+            double m_MinAccel;
+
             hardware_interface::JointStateInterface m_JointStateInterface;
 
             hardware_interface::VelocityJointInterface m_VelJointInterface;
@@ -151,6 +167,12 @@ namespace amr
             utils::PositionHelper m_PositionHelper; 
 
             void loadParams();
+
+            double limit(double& v, double v0, double v1, double dt);
+
+            double limitVel(double& v);
+
+            double limitAccel(double& v, double v0, double dt);
 
             //bool callback_drive_status_change(std_srvs::SetBool::Request& request, std_srvs::SetBool::Response& response);
         };
